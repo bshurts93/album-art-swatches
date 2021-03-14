@@ -1,12 +1,12 @@
 import React from "react";
+import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import NavDrawer from "@components/app/NavDrawer";
-import NavBar from "@components/app/NavBar";
-import "@/assets/styles/appStyles.scss";
 
-import Router from "@/router";
-
-import CssBaseline from "@material-ui/core/CssBaseline";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
 
 const drawerWidth = 240;
 
@@ -72,28 +72,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function App() {
+export default function NavBar(props) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <NavBar open={open} handleDrawerOpen={handleDrawerOpen} />
-      <NavDrawer open={open} handleDrawerClose={handleDrawerClose} />
-
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        <Router />
-      </main>
-    </div>
+    <AppBar
+      position="fixed"
+      className={clsx(classes.appBar, {
+        [classes.appBarShift]: props.open,
+      })}
+    >
+      <Toolbar>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={() => props.handleDrawerOpen()}
+          edge="start"
+          className={clsx(classes.menuButton, {
+            [classes.hide]: props.open,
+          })}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Typography variant="h6" noWrap>
+          Mini variant drawer
+        </Typography>
+      </Toolbar>
+    </AppBar>
   );
 }
