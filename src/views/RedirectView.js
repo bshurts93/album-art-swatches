@@ -5,7 +5,7 @@ export default class RedirectView extends React.Component {
   componentDidMount() {
     console.log("REDIRECT RENDERED");
 
-    const { setExpiryTime, history, location } = this.props;
+    const { history, location } = this.props;
     try {
       if (_.isEmpty(location.hash)) {
         return history.push("/search");

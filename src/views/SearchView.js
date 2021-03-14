@@ -1,15 +1,10 @@
 import React from "react";
-import {
-  Button,
-  TextField,
-  InputAdornment,
-  IconButton,
-} from "@material-ui/core";
+import { TextField, InputAdornment, IconButton } from "@material-ui/core";
 import { SearchOutlined } from "@material-ui/icons";
 
 import { searchArtist } from "@/api/spotify";
 
-class AlbumSearch extends React.Component {
+class SearchView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -64,4 +59,4 @@ class AlbumSearch extends React.Component {
     );
   }
 }
-export default AlbumSearch;
+export default SearchView;
