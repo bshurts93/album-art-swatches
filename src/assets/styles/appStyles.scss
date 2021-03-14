@@ -19,17 +19,16 @@
     -webkit-transition: all 0.4s ease-in-out 0s;
     -moz-transition: all 0.4s ease-in-out 0s;
     transition: all 0.4s ease-in-out 0s;
+    cursor: pointer;
   }
 
   &-image {
     width: 100%;
   }
 }
-
 .album:hover .album-overlay {
   opacity: 1;
 }
-
 .album-details {
   position: absolute;
   text-align: center;
@@ -46,13 +45,11 @@
   -moz-transition: all 0.3s ease-in-out 0s;
   transition: all 0.3s ease-in-out 0s;
 }
-
 .album:hover .album-details {
   top: 50%;
   left: 50%;
   opacity: 1;
 }
-
 .album-details h3 {
   color: #fff;
   font-weight: 500;
@@ -60,12 +57,15 @@
   margin-bottom: 0.5em;
   text-transform: uppercase;
 }
-
 .album-details p {
   color: #fff;
   font-size: 0.8em;
 }
-
 .fadeIn-bottom {
   top: 90%;
+}
+.swatch-item {
+  text-align: center;
+  padding: 0.75rem;
+  margin: 0.5rem;
 }

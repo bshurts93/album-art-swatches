@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Grid, Paper } from "@material-ui/core";
+import { Container, Grid } from "@material-ui/core";
 
 import ColorThief from "colorthief";
 import { sortColors } from "@/utils/colorUtil";
@@ -12,6 +12,7 @@ class SwatchView extends React.Component {
       palette: [],
       paletteHalfFirst: [],
       paletteHalfSecond: [],
+      album: {},
       albumHovered: false,
     };
   }
@@ -60,9 +61,13 @@ class SwatchView extends React.Component {
           <Grid item xs={6}>
             {this.state.paletteHalfFirst.map((color) => {
               return (
-                <Grid item xs={12} key={color}>
-                  <Paper style={{ background: color }}>xs=6</Paper>
-                </Grid>
+                <div
+                  className="swatch-item"
+                  style={{ background: color }}
+                  key={color}
+                >
+                  xs=6
+                </div>
               );
             })}
           </Grid>
@@ -70,9 +75,13 @@ class SwatchView extends React.Component {
           <Grid item xs={6}>
             {this.state.paletteHalfSecond.map((color) => {
               return (
-                <Grid item xs={12} key={color}>
-                  <Paper style={{ background: color }}>xs=6</Paper>
-                </Grid>
+                <div
+                  className="swatch-item"
+                  style={{ background: color }}
+                  key={color}
+                >
+                  xs=6
+                </div>
               );
             })}
           </Grid>

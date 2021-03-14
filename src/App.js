@@ -4,8 +4,7 @@ import NavDrawer from "@components/app/NavDrawer";
 import NavBar from "@components/app/NavBar";
 import "@/assets/styles/appStyles.scss";
 
-// Views
-import SwatchView from "@views/SwatchView";
+import Router from "@/router";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 
@@ -93,7 +92,7 @@ export default function App() {
 
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <SwatchView />
+        <Router />
       </main>
     </div>
   );
