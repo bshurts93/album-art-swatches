@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import NavDrawer from "@components/app/NavDrawer";
 import NavBar from "@components/app/NavBar";
+import "@/assets/styles/appStyles.scss";
 
 // Views
 import SwatchView from "@views/SwatchView";

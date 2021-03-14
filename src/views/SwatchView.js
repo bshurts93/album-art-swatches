@@ -1,60 +1,85 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import { Container, Grid, Paper } from "@material-ui/core";
 
 import ColorThief from "colorthief";
+import { sortColors } from "@/utils/colorUtil";
 import chon from "@/assets/images/chon.jpeg";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-}));
+class SwatchView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      palette: [],
+      paletteHalfFirst: [],
+      paletteHalfSecond: [],
+      albumHovered: false,
+    };
+  }
 
-export default function SwatchView() {
-  const classes = useStyles();
-  const [palette, setPalette] = React.useState([]);
-
-  const getPixels = async () => {
-    console.log("LOADED");
-
+  getPixels = async () => {
     const colorThief = new ColorThief();
     const img = document.querySelector("#cover");
 
     if (img) {
-      const palette = await colorThief
-        .getPalette(img, 10)
-        .map((arr) => `rgb(${arr[0]}, ${arr[1]}, ${arr[2]})`);
-      console.log(palette);
-
-      await setPalette(palette);
+      const palette = await colorThief.getPalette(img, 20);
+      const sortedPalette = sortColors(palette).map(
+        (c) => `rgb(${c[0]}, ${c[1]}, ${c[2]})`
+      );
+      const half = Math.ceil(sortedPalette.length / 2);
+      const first = sortedPalette.splice(0, half);
+      const second = sortedPalette.splice(-half);
+      await this.setState({
+        paletteHalfFirst: first,
+        paletteHalfSecond: second,
+      });
     }
   };
 
-  return (
-    <Container>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Paper style={{ background: chon }}>
-            <img src={chon} alt="album cover" id="cover" onLoad={getPixels} />
-          </Paper>
-        </Grid>
+  render() {
+    return (
+      <Container>
+        <Grid container spacing={3}>
+          <Grid item xs={12} style={{ textAlign: "center" }}>
+            <div></div>
 
-        {palette.map((color) => {
-          return (
-            <Grid item xs={6} key={color}>
-              <Paper className={classes.paper} style={{ background: color }}>
-                xs=6
-              </Paper>
-            </Grid>
-          );
-        })}
-      </Grid>
-    </Container>
-  );
+            <div className="album">
+              <div className="album-overlay" />
+              <img
+                className="album-image"
+                src={chon}
+                alt="album cover"
+                id="cover"
+                onLoad={this.getPixels}
+              />{" "}
+              <div className="album-details fadeIn-bottom">
+                <h3 className="album-title">GET SWATCH</h3>
+              </div>
+            </div>
+          </Grid>
+
+          <Grid item xs={6}>
+            {this.state.paletteHalfFirst.map((color) => {
+              return (
+                <Grid item xs={12} key={color}>
+                  <Paper style={{ background: color }}>xs=6</Paper>
+                </Grid>
+              );
+            })}
+          </Grid>
+
+          <Grid item xs={6}>
+            {this.state.paletteHalfSecond.map((color) => {
+              return (
+                <Grid item xs={12} key={color}>
+                  <Paper style={{ background: color }}>xs=6</Paper>
+                </Grid>
+              );
+            })}
+          </Grid>
+        </Grid>
+      </Container>
+    );
+  }
 }
+
+export default SwatchView;
