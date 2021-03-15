@@ -1,38 +1,46 @@
 import React from "react";
 import {
-  Button,
+  Container,
+  Grid,
   TextField,
   InputAdornment,
   IconButton,
 } from "@material-ui/core";
 import { SearchOutlined } from "@material-ui/icons";
 
-import { searchArtist } from "@/api/spotify";
+import { searchArtist, searchAlbums } from "@/api/spotify";
 
-class AlbumSearch extends React.Component {
+class SearchView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       artistSearch: "",
+      searchResults: [],
     };
   }
 
   handleChange = (e) => {
     this.setState({ artistSearch: e.target.value });
   };
-
   handleKeyUp = (e) => {
     if (e.keyCode === 13) this.searchArtist();
   };
-
   searchArtist = async () => {
     const results = await searchArtist(this.state.artistSearch);
+    this.setState({ searchResults: results.artists.items });
+    console.log(this.state.searchResults);
+  };
+  getArtistAlbums = async (id) => {
+    console.log(id);
+    const results = await searchAlbums(id);
+    this.setState({ selectedArtistAlbums: results.items });
+
     console.log(results);
   };
 
   render() {
     return (
-      <div>
+      <Container>
         <TextField
           id="artist-search"
           label="Artist Search"
@@ -60,8 +68,28 @@ class AlbumSearch extends React.Component {
             ),
           }}
         />
-      </div>
+
+        <Grid container spacing={3} style={{ textAlign: "center" }}>
+          {this.state.searchResults.map((artist) => {
+            return (
+              <Grid item xs={4} style={{ textAlign: "center" }} key={artist.id}>
+                <img
+                  src={
+                    artist.images[0]
+                      ? artist.images[0].url
+                      : "https://emby.media/community/uploads/inline/355992/5c1cc71abf1ee_genericcoverart.jpg"
+                  }
+                  alt={artist.name}
+                  className="artist-image"
+                  onClick={() => this.getArtistAlbums(artist.id)}
+                />
+                <h3>{artist.name}</h3>
+              </Grid>
+            );
+          })}
+        </Grid>
+      </Container>
     );
   }
 }
-export default AlbumSearch;
+export default SearchView;
