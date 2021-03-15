@@ -1,5 +1,12 @@
 import React from "react";
-import { TextField, InputAdornment, IconButton } from "@material-ui/core";
+import {
+  Card,
+  Container,
+  Grid,
+  TextField,
+  InputAdornment,
+  IconButton,
+} from "@material-ui/core";
 import { SearchOutlined } from "@material-ui/icons";
 
 import { searchArtist } from "@/api/spotify";
@@ -9,6 +16,7 @@ class SearchView extends React.Component {
     super(props);
     this.state = {
       artistSearch: "",
+      searchResults: [],
     };
   }
 
@@ -22,12 +30,13 @@ class SearchView extends React.Component {
 
   searchArtist = async () => {
     const results = await searchArtist(this.state.artistSearch);
-    console.log(results);
+    this.setState({ searchResults: results.artists.items });
+    console.log(this.state.searchResults);
   };
 
   render() {
     return (
-      <div>
+      <Container>
         <TextField
           id="artist-search"
           label="Artist Search"
@@ -55,7 +64,26 @@ class SearchView extends React.Component {
             ),
           }}
         />
-      </div>
+
+        <Grid container spacing={3} style={{ textAlign: "center" }}>
+          {this.state.searchResults.map((artist) => {
+            return (
+              <Grid item xs={4} style={{ textAlign: "center" }} key={artist.id}>
+                <img
+                  src={
+                    artist.images[0]
+                      ? artist.images[0].url
+                      : "https://emby.media/community/uploads/inline/355992/5c1cc71abf1ee_genericcoverart.jpg"
+                  }
+                  alt={artist.name}
+                  className="artist-image"
+                />
+                <h3>{artist.name}</h3>
+              </Grid>
+            );
+          })}
+        </Grid>
+      </Container>
     );
   }
 }
