@@ -43,3 +43,33 @@ export const sortColors = (colors) => {
     return a.hue - b.hue;
   });
 };
+
+export const changeHexShade = (rgbArr, percent) => {
+  var R = rgbArr[0];
+  var G = rgbArr[1];
+  var B = rgbArr[2];
+
+  R = parseInt((R * (100 + percent)) / 100);
+  G = parseInt((G * (100 + percent)) / 100);
+  B = parseInt((B * (100 + percent)) / 100);
+
+  R = R < 255 ? R : 255;
+  G = G < 255 ? G : 255;
+  B = B < 255 ? B : 255;
+
+  var RR = R.toString(16).length === 1 ? "0" + R.toString(16) : R.toString(16);
+  var GG = G.toString(16).length === 1 ? "0" + G.toString(16) : G.toString(16);
+  var BB = B.toString(16).length === 1 ? "0" + B.toString(16) : B.toString(16);
+
+  return "#" + RR + GG + BB;
+};
+
+export const createHueSwatch = (color) => {
+  let percentages = [-40, -20, 0, 20, 40];
+  let swatch = [];
+  percentages.forEach((percentage) => {
+    swatch.push(changeHexShade(color, percentage));
+  });
+
+  return swatch.reverse();
+};
