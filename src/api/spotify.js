@@ -5,14 +5,19 @@ const {
   REACT_APP_REDIRECT_URL,
 } = process.env;
 
+const baseUrl = "https://api.spotify.com/v1/";
+
 // QUERIES
 export const searchArtist = async (artist) => {
   setAuthHeader();
   const result = await axios.get(
-    `https://api.spotify.com/v1/search?query=${encodeURIComponent(
-      artist
-    )}&type=artist`
+    `${baseUrl}search?query=${encodeURIComponent(artist)}&type=artist`
   );
+  return result.data;
+};
+export const searchAlbums = async (artistId) => {
+  setAuthHeader();
+  const result = await axios.get(`${baseUrl}artists/${artistId}/albums`);
   return result.data;
 };
 
