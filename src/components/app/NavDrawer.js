@@ -12,6 +12,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Icon from "@material-ui/core/Icon";
 import { navDrawerItems } from "@/constants/navigation";
+import { useHistory } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -77,13 +78,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function NavDrawer(props) {
+const NavDrawer = (props) => {
   const classes = useStyles();
   const theme = useTheme();
+  const history = useHistory();
 
   const itemClick = (item) => {
-    console.log(item);
-
+    history.push(`${item.path}`);
     // Close drawer if open
     if (props.open) props.handleDrawerClose();
   };
@@ -126,4 +127,6 @@ export default function NavDrawer(props) {
       </Drawer>
     </div>
   );
-}
+};
+
+export default NavDrawer;
