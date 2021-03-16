@@ -1,7 +1,8 @@
 import React from "react";
+import ArtistList from "@components/search/ArtistList";
+import AlbumList from "@components/search/AlbumList";
 import {
   Container,
-  Grid,
   TextField,
   InputAdornment,
   IconButton,
@@ -14,31 +15,43 @@ class SearchView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      artistSearch: "",
-      searchResults: [],
+      artistSearchInput: "",
+      artistSearchResults: [],
+      selectedArtistAlbums: [],
+      isArtistSelected: false,
     };
   }
 
+  // EVENT HANDLERS
   handleChange = (e) => {
-    this.setState({ artistSearch: e.target.value });
+    this.setState({ artistSearchInput: e.target.value });
   };
   handleKeyUp = (e) => {
     if (e.keyCode === 13) this.searchArtist();
   };
+
+  // API METHODS
   searchArtist = async () => {
-    const results = await searchArtist(this.state.artistSearch);
-    this.setState({ searchResults: results.artists.items });
-    console.log(this.state.searchResults);
+    const results = await searchArtist(this.state.artistSearchInput);
+    this.setState({
+      artistSearchResults: results.artists.items,
+      selectedArtistAlbums: [],
+      isArtistSelected: false,
+    });
+    console.log(this.state.artistSearchResults);
   };
   getArtistAlbums = async (id) => {
-    console.log(id);
     const results = await searchAlbums(id);
-    this.setState({ selectedArtistAlbums: results.items });
-
-    console.log(results);
+    this.setState({
+      selectedArtistAlbums: results.items,
+      isArtistSelected: true,
+    });
+    console.log(this.state.selectedArtistAlbums);
   };
 
   render() {
+    let { isArtistSelected } = this.state;
+
     return (
       <Container>
         <TextField
@@ -52,7 +65,7 @@ class SearchView extends React.Component {
           InputLabelProps={{
             shrink: true,
           }}
-          value={this.state.artistSearch}
+          value={this.state.artistSearchInput}
           onChange={this.handleChange}
           onKeyUp={this.handleKeyUp}
           InputProps={{
@@ -60,34 +73,27 @@ class SearchView extends React.Component {
               <InputAdornment position="end">
                 <IconButton
                   aria-label="search button"
-                  onClick={this.searchArtist}
+                  onClick={this.state.searchArtist}
                 >
-                  {this.state.artistSearch ? <SearchOutlined /> : null}
+                  {this.state.artistSearchInput ? <SearchOutlined /> : null}
                 </IconButton>
               </InputAdornment>
             ),
           }}
         />
 
-        <Grid container spacing={3} style={{ textAlign: "center" }}>
-          {this.state.searchResults.map((artist) => {
-            return (
-              <Grid item xs={4} style={{ textAlign: "center" }} key={artist.id}>
-                <img
-                  src={
-                    artist.images[0]
-                      ? artist.images[0].url
-                      : "https://emby.media/community/uploads/inline/355992/5c1cc71abf1ee_genericcoverart.jpg"
-                  }
-                  alt={artist.name}
-                  className="artist-image"
-                  onClick={() => this.getArtistAlbums(artist.id)}
-                />
-                <h3>{artist.name}</h3>
-              </Grid>
-            );
-          })}
-        </Grid>
+        {isArtistSelected ? (
+          <AlbumList albums={this.state.selectedArtistAlbums} />
+        ) : (
+          <ArtistList
+            artistSearchInput={this.state.artistSearchInput}
+            artistSearchResults={this.state.artistSearchResults}
+            searchArtist={this.searchArtist}
+            getArtistAlbums={this.getArtistAlbums}
+            handleChange={this.handleChange}
+            handleKeyUp={this.handleKeyUp}
+          />
+        )}
       </Container>
     );
   }

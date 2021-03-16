@@ -1,4 +1,5 @@
 import React from "react";
+import { BrowserRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import NavDrawer from "@components/app/NavDrawer";
 import NavBar from "@components/app/NavBar";
@@ -86,14 +87,16 @@ export default function App() {
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
-      <NavBar open={open} handleDrawerOpen={handleDrawerOpen} />
-      <NavDrawer open={open} handleDrawerClose={handleDrawerClose} />
+      <BrowserRouter>
+        <CssBaseline />
+        <NavBar open={open} handleDrawerOpen={handleDrawerOpen} />
+        <NavDrawer open={open} handleDrawerClose={handleDrawerClose} />
 
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        <Router />
-      </main>
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+          <Router />
+        </main>
+      </BrowserRouter>
     </div>
   );
 }
