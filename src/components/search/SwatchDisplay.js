@@ -2,45 +2,38 @@ import React from "react";
 import { Container, Grid } from "@material-ui/core";
 
 import ColorThief from "colorthief";
-import { sortColors, createHueSwatch } from "@/utils/colorUtil";
-import chon from "@/assets/images/chon.jpeg";
+import { createHueSwatch } from "@/utils/colorUtil";
 
 class SwatchView extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
+      album: props.album,
       palette: [],
       paletteHalfFirst: [],
       paletteHalfSecond: [],
       primaryHueSwatch: [],
       secondaryHueSwatch: [],
-      album: {},
       albumHovered: false,
+      imgLoaded: false,
     };
   }
 
-  getPixels = async () => {
-    const colorThief = new ColorThief();
+  componentDidUpdate = (prevProps, prevState) => {
+    console.log("UPDATED");
     const img = document.querySelector("#cover");
+    console.log(img);
 
-    if (img) {
-      const palette = await colorThief.getPalette(img, 20);
-      const sortedPalette = sortColors(palette).map(
-        (c) => `rgb(${c[0]}, ${c[1]}, ${c[2]})`
-      );
-      const half = Math.ceil(sortedPalette.length / 2);
-      const first = sortedPalette.splice(0, half);
-      const second = sortedPalette.splice(-half);
-      await this.setState({
-        paletteHalfFirst: first,
-        paletteHalfSecond: second,
-      });
-    }
+    img.setAttribute("crossOrigin", "");
+    img.addEventListener("load", () => {
+      this.getAlbumColors();
+    });
   };
 
   getAlbumColors = async () => {
-    const colorThief = new ColorThief();
-    const img = document.querySelector("#cover");
+    const img = await document.querySelector("#cover");
+    const colorThief = await new ColorThief();
 
     if (img) {
       const palette = await colorThief.getPalette(img, 20);
@@ -68,10 +61,11 @@ class SwatchView extends React.Component {
               <div className="album-overlay" />
               <img
                 className="album-image"
-                src={chon}
+                src={this.state.album.images[0].url}
                 alt="album cover"
                 id="cover"
-                onLoad={this.getAlbumColors}
+                style={{ width: "840px", height: "400px" }}
+                onLoad={() => this.setState({ imgLoaded: true })}
               />
               <div className="album-details fadeIn-bottom">
                 <h3 className="album-title">GET SWATCH</h3>

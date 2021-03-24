@@ -2,8 +2,6 @@ import React from "react";
 import { Grid } from "@material-ui/core";
 
 const AlbumList = (props) => {
-  console.log(props);
-
   return (
     <div>
       <Grid container spacing={3} style={{ textAlign: "center" }}>
@@ -18,6 +16,7 @@ const AlbumList = (props) => {
                 }
                 alt={album.name}
                 className="artist-image"
+                onClick={() => props.getAlbumSwatch(album)}
               />
               <h3>{album.name}</h3>
             </Grid>

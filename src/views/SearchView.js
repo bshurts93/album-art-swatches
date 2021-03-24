@@ -1,6 +1,7 @@
 import React from "react";
 import ArtistList from "@components/search/ArtistList";
 import AlbumList from "@components/search/AlbumList";
+import SwatchDisplay from "@components/search/SwatchDisplay";
 import {
   Container,
   TextField,
@@ -18,7 +19,8 @@ class SearchView extends React.Component {
       artistSearchInput: "",
       artistSearchResults: [],
       selectedArtistAlbums: [],
-      isArtistSelected: false,
+      selectedAlbum: {},
+      currentDisplay: "Artist",
     };
   }
 
@@ -36,21 +38,24 @@ class SearchView extends React.Component {
     this.setState({
       artistSearchResults: results.artists.items,
       selectedArtistAlbums: [],
-      isArtistSelected: false,
     });
-    console.log(this.state.artistSearchResults);
   };
   getArtistAlbums = async (id) => {
     const results = await searchAlbums(id);
     this.setState({
+      currentDisplay: "Album",
       selectedArtistAlbums: results.items,
-      isArtistSelected: true,
     });
-    console.log(this.state.selectedArtistAlbums);
+  };
+  getAlbumSwatch = (album) => {
+    this.setState({
+      currentDisplay: "Swatch",
+      selectedAlbum: album,
+    });
   };
 
   render() {
-    let { isArtistSelected } = this.state;
+    let { currentDisplay } = this.state;
 
     return (
       <Container>
@@ -82,9 +87,7 @@ class SearchView extends React.Component {
           }}
         />
 
-        {isArtistSelected ? (
-          <AlbumList albums={this.state.selectedArtistAlbums} />
-        ) : (
+        {currentDisplay === "Artist" && (
           <ArtistList
             artistSearchInput={this.state.artistSearchInput}
             artistSearchResults={this.state.artistSearchResults}
@@ -93,6 +96,15 @@ class SearchView extends React.Component {
             handleChange={this.handleChange}
             handleKeyUp={this.handleKeyUp}
           />
+        )}
+        {currentDisplay === "Album" && (
+          <AlbumList
+            albums={this.state.selectedArtistAlbums}
+            getAlbumSwatch={this.getAlbumSwatch}
+          />
+        )}
+        {currentDisplay === "Swatch" && (
+          <SwatchDisplay album={this.state.selectedAlbum} />
         )}
       </Container>
     );
