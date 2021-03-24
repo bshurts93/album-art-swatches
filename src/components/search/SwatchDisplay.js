@@ -4,8 +4,6 @@ import { Container, Grid } from "@material-ui/core";
 import ColorThief from "colorthief";
 import { createHueSwatch } from "@/utils/colorUtil";
 
-import chon from "@/assets/images/chon.jpeg";
-
 class SwatchView extends React.Component {
   constructor(props) {
     super(props);
