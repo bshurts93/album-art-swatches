@@ -1,8 +1,9 @@
 import React from "react";
-import { Container, Grid } from "@material-ui/core";
+import { Container, Grid, Grow } from "@material-ui/core";
 
 import ColorThief from "colorthief";
-import { createHueSwatch } from "@/utils/colorUtil";
+import { createHueSwatch, testSwatch, isColorDark } from "@/utils/colorUtil";
+import { getAlbumTracks } from "@/api/spotify";
 
 class SwatchView extends React.Component {
   constructor(props) {
@@ -10,6 +11,7 @@ class SwatchView extends React.Component {
 
     this.state = {
       album: props.album,
+      albumTracks: [],
       palette: [],
       paletteHalfFirst: [],
       paletteHalfSecond: [],
@@ -17,35 +19,56 @@ class SwatchView extends React.Component {
       secondaryHueSwatch: [],
       albumHovered: false,
       imgLoaded: false,
+      test1: [],
+      test2: [],
     };
   }
 
-  componentDidUpdate = (prevProps, prevState) => {
-    console.log("UPDATED");
-    const img = document.querySelector("#cover");
-    console.log(img);
+  componentDidMount = async () => {
+    const result = await getAlbumTracks(this.props.album.id);
+    this.setState({ albumTracks: result.items });
+  };
 
-    img.setAttribute("crossOrigin", "");
-    img.addEventListener("load", () => {
-      this.getAlbumColors();
-    });
+  componentDidUpdate = () => {
+    if (this.state.albumTracks.length) {
+      const img = document.querySelector("#cover");
+      img.setAttribute("crossOrigin", "");
+      img.addEventListener("load", () => {
+        this.getAlbumColors();
+      });
+    }
   };
 
   getAlbumColors = async () => {
+    await this.setState({
+      palette: [],
+      paletteHalfFirst: [],
+      paletteHalfSecond: [],
+      test1: [],
+      test2: [],
+    });
     const img = await document.querySelector("#cover");
     const colorThief = await new ColorThief();
 
     if (img) {
       const palette = await colorThief.getPalette(img, 20);
-      const primaryColorOne = palette[Math.floor(Math.random() * 20)];
-      const primaryColorTwo = palette[Math.floor(Math.random() * 20)];
 
-      console.log(createHueSwatch(primaryColorOne));
-      console.log(createHueSwatch(primaryColorTwo));
+      const filteredPalette = palette.filter((x) => !isColorDark(x));
+      console.log(filteredPalette);
+
+      const primaryColorOne =
+        filteredPalette[Math.floor(Math.random() * filteredPalette.length)];
+      const primaryColorTwo =
+        filteredPalette[Math.floor(Math.random() * filteredPalette.length)];
+
+      const trackNum = this.state.albumTracks.length;
+      const test = testSwatch(primaryColorOne, primaryColorTwo, trackNum);
 
       await this.setState({
         primaryHueSwatch: createHueSwatch(primaryColorOne),
         secondaryHueSwatch: createHueSwatch(primaryColorTwo),
+        test1: test.firstHalfSwatch,
+        test2: test.secondHalfSwatch,
       });
     }
   };
@@ -55,16 +78,13 @@ class SwatchView extends React.Component {
       <Container>
         <Grid container spacing={3}>
           <Grid item xs={12} style={{ textAlign: "center" }}>
-            <div onClick={this.getAlbumColors}>GET NEW</div>
-
             <div className="album">
-              <div className="album-overlay" />
+              <div className="album-overlay" onClick={this.getAlbumColors} />
               <img
                 className="album-image"
                 src={this.state.album.images[0].url}
                 alt="album cover"
                 id="cover"
-                style={{ width: "840px", height: "400px" }}
                 onLoad={() => this.setState({ imgLoaded: true })}
               />
               <div className="album-details fadeIn-bottom">
@@ -74,29 +94,36 @@ class SwatchView extends React.Component {
           </Grid>
 
           <Grid item xs={6}>
-            {this.state.primaryHueSwatch.map((color) => {
+            {this.state.test1.map((color, i) => {
               return (
-                <div
-                  className="swatch-item"
-                  style={{ background: color }}
-                  key={color}
-                >
-                  xs=6
-                </div>
+                <Grow in={this.state.palette} timeout={200 * i}>
+                  <div
+                    className="swatch-item"
+                    style={{ background: color }}
+                    key={i}
+                  >
+                    {this.state.albumTracks[i].name}
+                  </div>
+                </Grow>
               );
             })}
           </Grid>
 
           <Grid item xs={6}>
-            {this.state.secondaryHueSwatch.map((color) => {
+            {this.state.test2.map((color, i) => {
               return (
-                <div
-                  className="swatch-item"
-                  style={{ background: color }}
-                  key={color}
+                <Grow
+                  in={this.state.palette}
+                  timeout={200 * i + this.state.test2.length * 200}
                 >
-                  xs=6
-                </div>
+                  <div
+                    className="swatch-item"
+                    style={{ background: color }}
+                    key={i}
+                  >
+                    {this.state.albumTracks[i + this.state.test1.length].name}
+                  </div>
+                </Grow>
               );
             })}
           </Grid>

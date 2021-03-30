@@ -13,12 +13,17 @@ export const searchArtist = async (artist) => {
   const result = await axios.get(
     `${baseUrl}search?query=${encodeURIComponent(artist)}&type=artist`
   );
-  return result.data;
+  if (result && result.data) return result.data;
 };
 export const searchAlbums = async (artistId) => {
   setAuthHeader();
   const result = await axios.get(`${baseUrl}artists/${artistId}/albums`);
-  return result.data;
+  if (result && result.data) return result.data;
+};
+export const getAlbumTracks = async (albumId) => {
+  setAuthHeader();
+  const result = await axios.get(`${baseUrl}albums/${albumId}/tracks`);
+  if (result && result.data) return result.data;
 };
 
 // AUTH METHODS

@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import { SearchOutlined } from "@material-ui/icons";
 
-import { searchArtist, searchAlbums } from "@/api/spotify";
+import { searchArtist, searchAlbums, getAlbumTracks } from "@/api/spotify";
 
 class SearchView extends React.Component {
   constructor(props) {
@@ -34,11 +34,17 @@ class SearchView extends React.Component {
 
   // API METHODS
   searchArtist = async () => {
-    const results = await searchArtist(this.state.artistSearchInput);
     this.setState({
-      artistSearchResults: results.artists.items,
+      currentDisplay: "Artist",
+      artistSearchResults: [],
       selectedArtistAlbums: [],
     });
+    setTimeout(async () => {
+      const results = await searchArtist(this.state.artistSearchInput);
+      this.setState({
+        artistSearchResults: results.artists.items,
+      });
+    }, 500);
   };
   getArtistAlbums = async (id) => {
     const results = await searchAlbums(id);
@@ -47,8 +53,11 @@ class SearchView extends React.Component {
       selectedArtistAlbums: results.items,
     });
   };
-  getAlbumSwatch = (album) => {
-    this.setState({
+  getAlbumSwatch = async (album) => {
+    console.log(album);
+
+    getAlbumTracks(album.id);
+    await this.setState({
       currentDisplay: "Swatch",
       selectedAlbum: album,
     });
