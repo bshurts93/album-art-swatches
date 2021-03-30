@@ -73,3 +73,35 @@ export const createHueSwatch = (color) => {
 
   return swatch.reverse();
 };
+
+export const testSwatch = (colorOne, colorTwo, trackNum) => {
+  const firstHalf = Math.round(trackNum / 2);
+  const secondHalf = trackNum - firstHalf;
+  const range = (start, stop, step) =>
+    Array.from(
+      { length: (stop - start) / step + 1 },
+      (_, i) => start + i * step
+    );
+
+  const firstHalfRange = range(1, firstHalf, 1)
+    .map((n) => n * 10)
+    .reverse();
+  // TODO: the range should not be this way, change it to be the same as the first range i think??
+  const secondHalfRange = range(1, secondHalf, 1)
+    .map((n) => n * 10)
+    .reverse();
+  let firstHalfSwatch = [];
+  let secondHalfSwatch = [];
+  firstHalfRange.forEach((percentage) => {
+    firstHalfSwatch.push(changeHexShade(colorOne, percentage));
+  });
+  secondHalfRange.forEach((percentage) => {
+    secondHalfSwatch.push(changeHexShade(colorTwo, percentage));
+  });
+
+  return { firstHalfSwatch, secondHalfSwatch };
+};
+
+export const isColorDark = (rgb) => {
+  return rgb[0] + rgb[1] + rgb[2] / 3 < 50;
+};
