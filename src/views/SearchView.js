@@ -59,7 +59,7 @@ class SearchView extends React.Component {
     getAlbumTracks(album.id);
     await this.setState({
       currentDisplay: "Swatch",
-      selectedAlbum: album,
+      selectedAlbum: { ...album, name: album.name },
     });
   };
 

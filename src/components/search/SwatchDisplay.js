@@ -78,19 +78,15 @@ class SwatchView extends React.Component {
       <Container>
         <Grid container spacing={3}>
           <Grid item xs={12} style={{ textAlign: "center" }}>
-            <div className="album">
-              <div className="album-overlay" onClick={this.getAlbumColors} />
-              <img
-                className="album-image"
-                src={this.state.album.images[0].url}
-                alt="album cover"
-                id="cover"
-                onLoad={() => this.setState({ imgLoaded: true })}
-              />
-              <div className="album-details fadeIn-bottom">
-                <h3 className="album-title">GET SWATCH</h3>
-              </div>
-            </div>
+            <img
+              className="album-image"
+              style={{ display: "none" }}
+              src={this.state.album.images[0].url}
+              alt="album cover"
+              id="cover"
+              onLoad={() => this.setState({ imgLoaded: true })}
+            />
+            <h2>{this.state.album.name}</h2>
           </Grid>
 
           <Grid item xs={6}>
