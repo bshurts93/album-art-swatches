@@ -48,6 +48,7 @@ class SearchView extends React.Component {
   };
   getArtistAlbums = async (id) => {
     const results = await searchAlbums(id);
+
     this.setState({
       currentDisplay: "Album",
       selectedArtistAlbums: results.items,

@@ -8,8 +8,13 @@ const ArtistList = (props) => {
       <Grid container spacing={3} style={{ textAlign: "center" }}>
         {props.artistSearchResults.map((artist, i) => {
           return (
-            <Zoom in={props.artistSearchResults} timeout={200 * i}>
-              <Grid item xs={4} style={{ textAlign: "center" }} key={artist.id}>
+            <Zoom
+              in={props.artistSearchResults}
+              timeout={800}
+              style={{ transitionDelay: i * 100 }}
+              key={artist.id}
+            >
+              <Grid item xs={4} style={{ textAlign: "center" }}>
                 <div className="album">
                   <div
                     className="album-overlay"
