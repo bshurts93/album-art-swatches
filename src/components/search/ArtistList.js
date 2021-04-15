@@ -6,25 +6,33 @@ const ArtistList = (props) => {
   return (
     <div>
       <Grid container spacing={3} style={{ textAlign: "center" }}>
-        {props.artistSearchResults.map((artist) => {
+        {props.artistSearchResults.map((artist, i) => {
           return (
             <Zoom
               in={props.artistSearchResults}
-              style={{
-                transitionDelay: props.artistSearchResults ? "500ms" : "0ms",
-              }}
+              timeout={800}
+              style={{ transitionDelay: i * 100 }}
+              key={artist.id}
             >
-              <Grid item xs={4} style={{ textAlign: "center" }} key={artist.id}>
-                <img
-                  src={
-                    artist.images[0]
-                      ? artist.images[0].url
-                      : links.genericAlbumCover
-                  }
-                  alt={artist.name}
-                  className="artist-image"
-                  onClick={() => props.getArtistAlbums(artist.id)}
-                />
+              <Grid item xs={4} style={{ textAlign: "center" }}>
+                <div className="album">
+                  <div
+                    className="album-overlay"
+                    onClick={() => props.getArtistAlbums(artist.id)}
+                  />
+                  <img
+                    className="album-image"
+                    src={
+                      artist.images[0]
+                        ? artist.images[0].url
+                        : links.genericAlbumCover
+                    }
+                    alt={artist.name}
+                  />
+                  <div className="album-details fadeIn-bottom">
+                    <h3 className="album-title">GET ARTIST</h3>
+                  </div>
+                </div>
                 <h3>{artist.name}</h3>
               </Grid>
             </Zoom>
