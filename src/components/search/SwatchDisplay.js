@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Grid, Grow } from "@material-ui/core";
+import { Button, Container, Grid, Grow } from "@material-ui/core";
 
 import ColorThief from "colorthief";
 import { createHueSwatch, testSwatch, isColorDark } from "@/utils/colorUtil";
@@ -47,6 +47,7 @@ class SwatchView extends React.Component {
       test1: [],
       test2: [],
     });
+
     const img = await document.querySelector("#cover");
     const colorThief = await new ColorThief();
 
@@ -77,7 +78,7 @@ class SwatchView extends React.Component {
     return (
       <Container>
         <Grid container spacing={3}>
-          <Grid item xs={12} style={{ textAlign: "center" }}>
+          <Grid item xs={12}>
             <img
               className="album-image"
               style={{ display: "none" }}
@@ -86,13 +87,23 @@ class SwatchView extends React.Component {
               id="cover"
               onLoad={() => this.setState({ imgLoaded: true })}
             />
-            <h2>{this.state.album.name}</h2>
+            <h1 className="swatch-title">{this.state.album.name}</h1>
+            <Button
+              color="primary"
+              onClick={() =>
+                setTimeout(() => {
+                  this.getAlbumColors();
+                }, 400)
+              }
+            >
+              New Swatch
+            </Button>
           </Grid>
 
           <Grid item xs={6}>
             {this.state.test1.map((color, i) => {
               return (
-                <Grow in={this.state.palette} timeout={200 * i}>
+                <Grow in={this.state.palette} timeout={400 * i}>
                   <div
                     className="swatch-item"
                     style={{ background: color }}
@@ -110,7 +121,7 @@ class SwatchView extends React.Component {
               return (
                 <Grow
                   in={this.state.palette}
-                  timeout={200 * i + this.state.test2.length * 200}
+                  timeout={400 * i + this.state.test2.length * 400}
                 >
                   <div
                     className="swatch-item"
