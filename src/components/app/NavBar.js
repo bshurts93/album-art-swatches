@@ -95,7 +95,7 @@ export default function NavBar(props) {
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" noWrap>
-          Mini variant drawer
+          Album Cover Swatch Generator
         </Typography>
       </Toolbar>
     </AppBar>

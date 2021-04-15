@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Container, Grid, Grow } from "@material-ui/core";
+import { jsPDF } from "jspdf";
 
 import ColorThief from "colorthief";
 import { createHueSwatch, testSwatch, isColorDark } from "@/utils/colorUtil";
@@ -74,10 +75,32 @@ class SwatchView extends React.Component {
     }
   };
 
+  saveSwatch = () => {
+    const doc = new jsPDF();
+    doc.html(document.getElementById("swatch-pdf-container"), {
+      callback: function (doc) {
+        doc.save("test.pdf");
+      },
+      x: 10,
+      y: 10,
+    });
+  };
+
   render() {
     return (
       <Container>
-        <Grid container spacing={3}>
+        <Button
+          color="primary"
+          onClick={() =>
+            setTimeout(() => {
+              this.getAlbumColors();
+            }, 400)
+          }
+        >
+          New Swatch
+        </Button>
+        <Button onClick={this.saveSwatch}>Save to PDF</Button>
+        <Grid id="swatch-pdf-container" container spacing={3}>
           <Grid item xs={12}>
             <img
               className="album-image"
@@ -88,16 +111,6 @@ class SwatchView extends React.Component {
               onLoad={() => this.setState({ imgLoaded: true })}
             />
             <h1 className="swatch-title">{this.state.album.name}</h1>
-            <Button
-              color="primary"
-              onClick={() =>
-                setTimeout(() => {
-                  this.getAlbumColors();
-                }, 400)
-              }
-            >
-              New Swatch
-            </Button>
           </Grid>
 
           <Grid item xs={6}>
