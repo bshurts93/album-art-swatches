@@ -8,7 +8,7 @@ const AlbumList = (props) => {
         {props.albums.map((album, i) => {
           return (
             <Zoom
-              in={props.albums}
+              in={props.albums.length > 0}
               timeout={800}
               style={{ transitionDelay: i * 100 }}
               key={album.id}

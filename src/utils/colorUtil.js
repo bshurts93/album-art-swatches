@@ -99,9 +99,21 @@ export const testSwatch = (colorOne, colorTwo, trackNum) => {
     secondHalfSwatch.push(changeHexShade(colorTwo, percentage));
   });
 
-  return { firstHalfSwatch, secondHalfSwatch };
+  const firstHalfTextColor = getTextColor(colorOne);
+  const secondHalfTextColor = getTextColor(colorTwo);
+
+  return {
+    firstHalfSwatch,
+    secondHalfSwatch,
+    firstHalfTextColor,
+    secondHalfTextColor,
+  };
 };
 
 export const isColorDark = (rgb) => {
-  return rgb[0] + rgb[1] + rgb[2] / 3 < 50;
+  return rgb[0] + rgb[1] + rgb[2] / 3 < 60;
+};
+
+export const getTextColor = (rgb) => {
+  return rgb[0] + rgb[1] + rgb[2] / 3 < 200 ? "#fff" : "#000";
 };

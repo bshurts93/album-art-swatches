@@ -55,8 +55,6 @@ class SearchView extends React.Component {
     });
   };
   getAlbumSwatch = async (album) => {
-    console.log(album);
-
     getAlbumTracks(album.id);
     await this.setState({
       currentDisplay: "Swatch",

@@ -22,6 +22,8 @@ class SwatchView extends React.Component {
       imgLoaded: false,
       test1: [],
       test2: [],
+      primaryTextColor: false,
+      secondaryTextColor: false,
     };
   }
 
@@ -56,7 +58,6 @@ class SwatchView extends React.Component {
       const palette = await colorThief.getPalette(img, 20);
 
       const filteredPalette = palette.filter((x) => !isColorDark(x));
-      console.log(filteredPalette);
 
       const primaryColorOne =
         filteredPalette[Math.floor(Math.random() * filteredPalette.length)];
@@ -71,6 +72,8 @@ class SwatchView extends React.Component {
         secondaryHueSwatch: createHueSwatch(primaryColorTwo),
         test1: test.firstHalfSwatch,
         test2: test.secondHalfSwatch,
+        primaryTextColor: test.firstHalfTextColor,
+        secondaryTextColor: test.secondHalfTextColor,
       });
     }
   };
@@ -116,11 +119,13 @@ class SwatchView extends React.Component {
           <Grid item xs={6}>
             {this.state.test1.map((color, i) => {
               return (
-                <Grow in={this.state.palette} timeout={400 * i}>
+                <Grow in={this.state.palette} timeout={400 * i} key={i}>
                   <div
                     className="swatch-item"
-                    style={{ background: color }}
-                    key={i}
+                    style={{
+                      background: color,
+                      color: this.state.primaryTextColor,
+                    }}
                   >
                     {this.state.albumTracks[i].name}
                   </div>
@@ -135,11 +140,14 @@ class SwatchView extends React.Component {
                 <Grow
                   in={this.state.palette}
                   timeout={400 * i + this.state.test2.length * 400}
+                  key={i}
                 >
                   <div
                     className="swatch-item"
-                    style={{ background: color }}
-                    key={i}
+                    style={{
+                      background: color,
+                      color: this.state.secondaryTextColor,
+                    }}
                   >
                     {this.state.albumTracks[i + this.state.test1.length].name}
                   </div>

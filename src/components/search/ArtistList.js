@@ -9,7 +9,7 @@ const ArtistList = (props) => {
         {props.artistSearchResults.map((artist, i) => {
           return (
             <Zoom
-              in={props.artistSearchResults}
+              in={props.artistSearchResults.length > 0}
               timeout={800}
               style={{ transitionDelay: i * 100 }}
               key={artist.id}
